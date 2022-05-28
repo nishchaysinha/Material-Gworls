@@ -159,5 +159,25 @@ struct HelloPhotogrammetry: ParsableCommand {
         featureSensitivity.map { configuration.featureSensitivity = $0 }
         return configuration
     }
-
+/// Creates a request to use based on the command-line arguments.
+    private func makeRequestFromArguments() -> PhotogrammetrySession.Request {
+        let outputUrl = URL(fileURLWithPath: outputFilename)
+        if let detailSetting = detail {
+            return PhotogrammetrySession.Request.modelFile(url: outputUrl, detail: detailSetting)
+        } else {
+            return PhotogrammetrySession.Request.modelFile(url: outputUrl)
+        }
+    }
+    
+    /// Called when the the session sends a request completed message.
+    private static func handleRequestComplete(request: PhotogrammetrySession.Request,
+                                              result: PhotogrammetrySession.Result) {
+        logger.log("Request complete: \(String(describing: request)) with result...")
+        switch result {
+            case .modelFile(let url):
+                logger.log("\tmodelFile available at url=\(url)")
+            default:
+                logger.warning("\tUnexpected result: \(String(describing: result))")
+        }
+    }
 
