@@ -133,3 +133,22 @@ struct HelloPhotogrammetry: ParsableCommand {
             }
         }
       
+      // The compiler may deinitialize these objects since they may appear to be
+        // unused. This keeps them from being deallocated until they exit.
+        withExtendedLifetime((session, waiter)) {
+            // Run the main process call on the request, then enter the main run
+            // loop until you get the published completion event or error.
+            do {
+                let request = makeRequestFromArguments()
+                logger.log("Using request: \(String(describing: request))")
+                try session.process(requests: [ request ])
+                // Enter the infinite loop dispatcher used to process asynchronous
+                // blocks on the main queue. You explicitly exit above to stop the loop.
+                RunLoop.main.run()
+            } catch {
+                logger.critical("Process got error: \(String(describing: error))")
+                Foundation.exit(1)
+            }
+        }
+    }
+
