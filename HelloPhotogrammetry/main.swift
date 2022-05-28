@@ -31,3 +31,8 @@ private func supportsRayTracing() -> Bool {
     }
     return false
 }
+
+/// Returns `true` if the current hardware supports Object Capture.
+func supportsObjectCapture() -> Bool {
+    return supportsObjectReconstruction() && supportsRayTracing()
+}
