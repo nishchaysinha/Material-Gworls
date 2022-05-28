@@ -1,2 +1,10 @@
-# Material-Gworls
-Project for WomenTechies-22. 💅
+<h1 align="center">WomenTechies22💀</h1>
+
+<div align="center">
+Project by MaterialGworls💅
+</div>
+
+<div align="center">
+  <img width="35%" src="https://cdn.discordapp.com/attachments/960206228817063938/980091439918755881/unknown.png" alt="cover" />
+  
+</div>
