@@ -16,3 +16,10 @@ product will be 'as it is in the picture'. It's a surefire way of ensuring
 that customers get exactly what they ordered. Merchants can use 
 our technology and upload 3D models of their product.
 </div>
+
+<div>
+<h1>How it works?</h1>
+As of now, we use Apple's RealityKit for photogrammetry to make 3D models out of scanned images.
+Essentially we want an entire blockchain based ecosystem of goods that are being bought and sold.
+
+</div>
