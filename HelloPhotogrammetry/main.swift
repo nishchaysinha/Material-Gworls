@@ -36,3 +36,38 @@ private func supportsRayTracing() -> Bool {
 func supportsObjectCapture() -> Bool {
     return supportsObjectReconstruction() && supportsRayTracing()
 }
+
+
+/// Implements the main command structure, defines the command-line arguments,
+/// and specifies the main run loop.
+struct HelloPhotogrammetry: ParsableCommand {
+    
+    private typealias Configuration = PhotogrammetrySession.Configuration
+    private typealias Request = PhotogrammetrySession.Request
+    
+    public static let configuration = CommandConfiguration(
+        abstract: "Reconstructs 3D USDZ model from a folder of images.")
+    
+    @Argument(help: "The local input file folder of images.")
+    private var inputFolder: String
+    
+    @Argument(help: "Full path to the USDZ output file.")
+    private var outputFilename: String
+    
+    @Option(name: .shortAndLong,
+            parsing: .next,
+            help: "detail {preview, reduced, medium, full, raw}  Detail of output model in terms of mesh size and texture size .",
+            transform: Request.Detail.init)
+    private var detail: Request.Detail? = nil
+    
+    @Option(name: [.customShort("o"), .long],
+            parsing: .next,
+            help: "sampleOrdering {unordered, sequential}  Setting to sequential may speed up computation if images are captured in a spatially sequential pattern.",
+            transform: Configuration.SampleOrdering.init)
+    private var sampleOrdering: Configuration.SampleOrdering?
+    
+    @Option(name: .shortAndLong,
+            parsing: .next,
+            help: "featureSensitivity {normal, high}  Set to high if the scanned object does not contain a lot of discernible structures, edges or textures.",
+            transform: Configuration.FeatureSensitivity.init)
+    private var featureSensitivity: Configuration.FeatureSensitivity?
