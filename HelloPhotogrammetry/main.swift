@@ -180,4 +180,41 @@ struct HelloPhotogrammetry: ParsableCommand {
                 logger.warning("\tUnexpected result: \(String(describing: result))")
         }
     }
+    /// Called when the sessions sends a progress update message.
+    private static func handleRequestProgress(request: PhotogrammetrySession.Request,
+                                              fractionComplete: Double) {
+        logger.log("Progress(request = \(String(describing: request)) = \(fractionComplete)")
+    }
+
+}
+
+// MARK: - Helper Functions / Extensions
+
+private func handleRequestProgress(request: PhotogrammetrySession.Request,
+                                   fractionComplete: Double) {
+    print("Progress(request = \(String(describing: request)) = \(fractionComplete)")
+}
+
+/// Error thrown when an illegal option is specified.
+private enum IllegalOption: Swift.Error {
+    case invalidDetail(String)
+    case invalidSampleOverlap(String)
+    case invalidSampleOrdering(String)
+    case invalidFeatureSensitivity(String)
+}
+
+/// Extension to add a throwing initializer used as an option transform to verify the user-supplied arguments.
+@available(macOS 12.0, *)
+extension PhotogrammetrySession.Request.Detail {
+    init(_ detail: String) throws {
+        switch detail {
+            case "preview": self = .preview
+            case "reduced": self = .reduced
+            case "medium": self = .medium
+            case "full": self = .full
+            case "raw": self = .raw
+            default: throw IllegalOption.invalidDetail(detail)
+        }
+    }
+}
 
