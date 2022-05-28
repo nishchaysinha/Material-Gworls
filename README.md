@@ -5,6 +5,6 @@ Project by MaterialGworls💅
 </div>
 
 <div align="center">
-  <img width="35%" src="https://cdn.discordapp.com/attachments/960206228817063938/980091439918755881/unknown.png" alt="cover" />
+  <img width="35%" src="https://cdn.discordapp.com/attachments/960206228817063938/980096665270751242/upscaled-modified.png" alt="cover" />
   
 </div>
