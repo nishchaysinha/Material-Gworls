@@ -71,3 +71,65 @@ struct HelloPhotogrammetry: ParsableCommand {
             help: "featureSensitivity {normal, high}  Set to high if the scanned object does not contain a lot of discernible structures, edges or textures.",
             transform: Configuration.FeatureSensitivity.init)
     private var featureSensitivity: Configuration.FeatureSensitivity?
+  
+   /// The main run loop entered at the end of the file.
+    func run() {
+        guard supportsObjectCapture() else {
+            logger.error("Program terminated early because the hardware doesn't support Object Capture.")
+            print("Object Capture is not available on this computer.")
+            Foundation.exit(1)
+        }
+        
+        let inputFolderUrl = URL(fileURLWithPath: inputFolder, isDirectory: true)
+        let configuration = makeConfigurationFromArguments()
+        logger.log("Using configuration: \(String(describing: configuration))")
+        
+        // Try to create the session, or else exit.
+        var maybeSession: PhotogrammetrySession? = nil
+        do {
+            maybeSession = try PhotogrammetrySession(input: inputFolderUrl,
+                                                     configuration: configuration)
+            logger.log("Successfully created session.")
+        } catch {
+            logger.error("Error creating session: \(String(describing: error))")
+            Foundation.exit(1)
+        }
+        guard let session = maybeSession else {
+            Foundation.exit(1)
+        }
+        
+        let waiter = Task {
+            do {
+                for try await output in session.outputs {
+                    switch output {
+                        case .processingComplete:
+                            logger.log("Processing is complete!")
+                            Foundation.exit(0)
+                        case .requestError(let request, let error):
+                            logger.error("Request \(String(describing: request)) had an error: \(String(describing: error))")
+                        case .requestComplete(let request, let result):
+                            HelloPhotogrammetry.handleRequestComplete(request: request, result: result)
+                        case .requestProgress(let request, let fractionComplete):
+                            HelloPhotogrammetry.handleRequestProgress(request: request,
+                                                                      fractionComplete: fractionComplete)
+                        case .inputComplete:  // data ingestion only!
+                            logger.log("Data ingestion is complete.  Beginning processing...")
+                        case .invalidSample(let id, let reason):
+                            logger.warning("Invalid Sample! id=\(id)  reason=\"\(reason)\"")
+                        case .skippedSample(let id):
+                            logger.warning("Sample id=\(id) was skipped by processing.")
+                        case .automaticDownsampling:
+                            logger.warning("Automatic downsampling was applied!")
+                        case .processingCancelled:
+                            logger.warning("Processing was cancelled.")
+                        @unknown default:
+                            logger.error("Output: unhandled message: \(output.localizedDescription)")
+
+                    }
+                }
+            } catch {
+                logger.error("Output: ERROR = \(String(describing: error))")
+                Foundation.exit(0)
+            }
+        }
+      
