@@ -217,4 +217,41 @@ extension PhotogrammetrySession.Request.Detail {
         }
     }
 }
+@available(macOS 12.0, *)
+extension PhotogrammetrySession.Configuration.SampleOrdering {
+    init(sampleOrdering: String) throws {
+        if sampleOrdering == "unordered" {
+            self = .unordered
+        } else if sampleOrdering == "sequential" {
+            self = .sequential
+        } else {
+            throw IllegalOption.invalidSampleOrdering(sampleOrdering)
+        }
+    }
+    
+}
+
+@available(macOS 12.0, *)
+extension PhotogrammetrySession.Configuration.FeatureSensitivity {
+    init(featureSensitivity: String) throws {
+        if featureSensitivity == "normal" {
+            self = .normal
+        } else if featureSensitivity == "high" {
+            self = .high
+        } else {
+            throw IllegalOption.invalidFeatureSensitivity(featureSensitivity)
+        }
+    }
+}
+
+// MARK: - Main
+
+HelloPhotogrammetry.main(["/Users/vaibhavijha/Desktop/wt", "/Users/vaibhavijha/Desktop/wt_usdz/wt_full.usdz", "-d","full", "-o", "sequential", "-f", "normal"])
+
+// Run the program until completion.
+if #available(macOS 12.0, *) {
+    HelloPhotogrammetry.main()
+} else {
+    fatalError("Requires minimum macOS 12.0!")
+}
 
