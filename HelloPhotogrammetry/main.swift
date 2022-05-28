@@ -22,3 +22,12 @@ private func supportsObjectReconstruction() -> Bool {
     }
     return false
 }
+
+/// Returns `true` if at least one GPU has hardware support for ray tracing. The GPU that supports ray
+/// tracing need not be the same GPU that supports object reconstruction.
+private func supportsRayTracing() -> Bool {
+    for device in MTLCopyAllDevices() where device.supportsRaytracing {
+        return true
+    }
+    return false
+}
