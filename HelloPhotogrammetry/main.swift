@@ -151,4 +151,13 @@ struct HelloPhotogrammetry: ParsableCommand {
             }
         }
     }
+  
+   /// Creates the session configuration by overriding any defaults with arguments specified.
+    private func makeConfigurationFromArguments() -> PhotogrammetrySession.Configuration {
+        var configuration = PhotogrammetrySession.Configuration()
+        sampleOrdering.map { configuration.sampleOrdering = $0 }
+        featureSensitivity.map { configuration.featureSensitivity = $0 }
+        return configuration
+    }
+
 
