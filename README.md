@@ -1,5 +1,8 @@
 <h1 align="center">WomenTechies22💀</h1>
-(https://www.icloud.com/iclouddrive/09fek7uZnI6otnCtwTet9C09w#wt22)
+<div align="center">
+  [Demo Video Here](https://www.icloud.com/iclouddrive/09fek7uZnI6otnCtwTet9C09w#wt22)<br>
+  [Download pdf Here](https://cdn.discordapp.com/attachments/960206228817063938/980406033795133460/ATLiER.pdf)
+</div>
 
 <div align="center">
 Project by MaterialGworls💅
